@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useParams, useHistory } from "react-router-dom";
+import axiosWithAuth from "../util/axiosWithAuth"
 
 const initialColor = {
   color: "",
@@ -11,6 +13,9 @@ const ColorList = ({ colors, updateColors }) => {
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
 
+  const { push } = useHistory();
+  const { id } = useParams();
+
   const editColor = color => {
     setEditing(true);
     setColorToEdit(color);
@@ -21,11 +26,28 @@ const ColorList = ({ colors, updateColors }) => {
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
+    axios
+      .put(`/colors/${colorToEdit.id}`, colorToEdit)
+      .then(res => {
+        // res.data
+        setColorToEdit(res.data);
+        push(`/bubble-page/${id}`);
+      })
+      .catch(err => console.log(err));
   };
 
   const deleteColor = color => {
     // make a delete request to delete this color
+    axios
+      .delete(`http://localhost:5000/api/color/${color.id}`)
+      .then(response => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
 
   return (
     <div className="colors-wrap">

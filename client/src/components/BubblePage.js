@@ -24,8 +24,6 @@ const BubblePage = () => {
 
   return (
     <>
-
-    <h1>this is to tell if it is hooking up to the bubbles page.</h1>
       <ColorList colors={colorList} updateColors={setColorList} />
       <Bubbles colors={colorList} />
     </>
