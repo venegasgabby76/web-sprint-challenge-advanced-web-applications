@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useParams, useHistory } from "react-router-dom";
 import axiosWithAuth from "../util/axiosWithAuth";
 
 
@@ -14,8 +12,8 @@ const ColorList = ({ colors, updateColors }) => {
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
 
-  const { push } = useHistory();
-  const { id } = useParams();
+  
+  
 
   const editColor = color => {
     setEditing(true);
@@ -27,14 +25,16 @@ const ColorList = ({ colors, updateColors }) => {
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
+
+    //note to self *use axiosWithAuth after anything that is inside the private route like a login or register page*
+
+
     axiosWithAuth()
       .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
-      .then(res => {
-        // res.data
-        setColorToEdit(res.data);
-       
+      .then(response => {
+        setColorToEdit(response.data);
       })
-      .catch(err => console.log(err));
+      .catch(error => console.log(error));
   };
 
   const deleteColor = color => {
@@ -43,7 +43,6 @@ const ColorList = ({ colors, updateColors }) => {
       .delete(`http://localhost:5000/api/colors/${color.id}`)
       .then(response => {
         console.log(response)
-        push('/bubble-page/');
       })
       .catch((error) => {
         console.log(error);
